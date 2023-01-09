@@ -5,8 +5,8 @@ import UsuarioController from "../controller/usuarioController.js";
 const router = express.Router();
 
 router
-    .post('/usuario', UsuarioController.cadastrar)
-    .get('/usuario', UsuarioController.listar)
-    .get('/usuario/:email', UsuarioController.listarPorEmail);
+    .post('/api/usuarios', UsuarioController.cadastrar)
+    .get('/api/usuarios', UsuarioController.listar)
+    .get('/api/usuarios/:email', UsuarioController.listarPorEmail);
 
 export default router;

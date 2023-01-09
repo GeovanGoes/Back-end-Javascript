@@ -17,7 +17,20 @@ class UsuarioController {
 
 
     static listar = (req, res) => {
-        
+        let email = req.query.email;
+        console.log(email);
+        if (email) {
+            usuarios.findOne({'email': email}, 'email nome ', function (err, usuario) {
+                console.log(err);
+                console.log(usuario);
+                if (err) {
+                    console.log(err);
+                    res.status(500).send({message: `Deu erro no find by email`});
+                } else
+                    res.status(200).send(usuario.toJSON());
+            })
+        } else
+            res.status(500).send({message: `Deu erro no find`});
     }
     
     static listarPorEmail = (req, res) => {

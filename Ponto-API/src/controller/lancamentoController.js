@@ -1,5 +1,6 @@
 import lancamentos from "../models/Lancamento.js"
 import Dia from "../dto/dia.js";
+import DateHelper from "../utils/DateHelper.js";
 
 class LancamentoController {
 
@@ -35,19 +36,31 @@ class LancamentoController {
     }
 
     static deletar = (req, res) => {
-
-        console.log(res.body);
+        let idUsuario = req.query.idUsuario;
+        let data = req.query.dataHora;
+        
+        let {_id} = req.params;
+        console.log(_id);
+        lancamentos.deleteOne({"usuario": idUsuario, "dataHora": data}, (err) => {
+            if (err)
+                res.status(500).send({message: `Erro ao deletar o lancamento.`});
+            else
+                res.status(200).send({message: `Lancamento removido.`});
+        })
     }
 
     static atualizar = (req, res) => {
-
         console.log(res.body);
+        res.status(500).send({message: `not implemented`});
     }
 
     static listar = (req, res) => {
+
+        let dateHelper = new DateHelper();
+
         console.log("Listando os lancamentos", req.query.idUsuario);
         let idUsuario = req.query.idUsuario;
-        
+        console.log(idUsuario);
         if (idUsuario) {
             lancamentos.find({'usuario': idUsuario}, 'dataHora usuario', function (err, lcs) {
                 console.log(err);
@@ -58,28 +71,38 @@ class LancamentoController {
                 else {
                     let dias = [];
                     lcs.forEach(item => {
-                        let dia = dias.filter(d => d.data == item.dataHora.toLocaleDateString("pt-BR"));
-                        console.log("item:", item);
-                        if (!dia || dia.length == 0) {
-                            dia = new Dia();
-                        }
-                        console.log("dia:", dia);
-                        dia.data = item.dataHora.toLocaleDateString("pt-BR");
                         
+                        let found = false;
+                        dias.forEach(d => {
+                            if (d.data == item.dataHora.toLocaleDateString("pt-BR")) {
+                                d.data = item.dataHora.toLocaleDateString("pt-BR");
+                                d.registros.push(dateHelper.formatarHorario(item.dataHora));
+                                d.registros.sort();
+                                d.lancamentos.push(item.dataHora);
+                                d.lancamentos.sort();
+                                found = true;
+                            }
+                        })
 
-                        
-                        dia.registros.push(item.dataHora.toLocaleTimeString("pt-BR"));
-                        dia.lancamentos.push(item.dataHora);
-                        console.log("dia:", dia);
-                        dias.push(dia);
+                        if (!found) {
+                            let dia = new Dia();
+                            dia.data = item.dataHora.toLocaleDateString("pt-BR");
+                            dia.registros.push(dateHelper.formatarHorario(item.dataHora));
+                            dia.registros.sort();
+                            dia.lancamentos.push(item.dataHora);
+                            dia.lancamentos.sort();
+                            dias.push(dia);
+                        }
                     })
+                    dias.forEach(d => {
+                        d.soma = dateHelper.obterPeriodoTrabalhado(d.lancamentos);
+                        d.numeroDaSemana = dateHelper.obterNumeroDaSemana(d.lancamentos[0]);
+                    });
                     res.status(200).json(dias);
                 }
             });
         } else {
-            lancamentos.find((err, lcs) => {
-                tratarResponseSucesso(res, lcs);
-            });
+            res.status(500).send({message: `Erro ao listar os lancamentos.`});
         }
     }
 
