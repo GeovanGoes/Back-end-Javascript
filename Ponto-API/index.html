@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <style>
+            p {
+                text-align: center;
+                color: blue;
+                text-decoration: underline;
+            }
+
+            table, th, tr {
+                border: solid 1px black;
+                background-color: aliceblue;
+            }
+        </style>
+        <script>
+                function cliquei() {
+                    alert("o paragrafo foi clicado.");
+                }
+        </script> 
+    </head>    
+    <body>
+        <p onclick="cliquei()">Tamires</p>
+        <p>Geovan</p>
+
+        <table>
+            <thead>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>Idade</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Geovan</th>
+                    <th>Goes</th>
+                    <th>30</th>
+                </tr>
+                <tr>
+                    <th>Tamires</th>
+                    <th>Oliveira</th>
+                    <th>23</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <form action="">
+            <label for="nome">Nome: </label>
+            <input type="text" id="nome" name="nome"/>
+            <label>Sobrenome: </label>
+            <input type="text"/>
+            <button>Cadastrar</button>
+        </form>
+
+
+    </body>
+
+
+</html>
