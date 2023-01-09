@@ -4,11 +4,12 @@
 class Dia {
 
     data;
-    registros;
-    lancamentos;
+    registros = [];
+    lancamentos = [];
     sum;
     soma;
     numeroDaSemana;
     feriado;
-
 }
+
+export default Dia;
