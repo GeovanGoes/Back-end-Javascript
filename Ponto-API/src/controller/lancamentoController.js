@@ -98,6 +98,18 @@ class LancamentoController {
                         d.soma = dateHelper.obterPeriodoTrabalhado(d.lancamentos);
                         d.numeroDaSemana = dateHelper.obterNumeroDaSemana(d.lancamentos[0]);
                     });
+
+                    dias.sort(function (a, b) {
+                        const nameA = a.data;
+                        const nameB = b.data;
+                        if (nameA > nameB) {
+                            return -1;
+                        }
+                        if (nameA < nameB) {
+                            return 1;
+                        }
+                        return 0;
+                    })
                     res.status(200).json(dias);
                 }
             });
