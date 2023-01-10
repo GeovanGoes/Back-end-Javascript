@@ -4,6 +4,7 @@
 class Dia {
 
     data;
+    date;
     registros = [];
     lancamentos = [];
     sum;

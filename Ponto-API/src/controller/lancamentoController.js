@@ -97,19 +97,10 @@ class LancamentoController {
                     dias.forEach(d => {
                         d.soma = dateHelper.obterPeriodoTrabalhado(d.lancamentos);
                         d.numeroDaSemana = dateHelper.obterNumeroDaSemana(d.lancamentos[0]);
+                        d.date = d.lancamentos[0];
                     });
 
-                    dias.sort(function (a, b) {
-                        const nameA = a.data;
-                        const nameB = b.data;
-                        if (nameA > nameB) {
-                            return -1;
-                        }
-                        if (nameA < nameB) {
-                            return 1;
-                        }
-                        return 0;
-                    })
+                    dias.sort((p1, p2) => (p2.date > p1.date) ? 1 : (p2.date < p1.date) ? -1 : 0);
                     res.status(200).json(dias);
                 }
             });
